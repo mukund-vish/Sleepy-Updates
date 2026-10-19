@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Manrope, Newsreader } from "next/font/google";
 import NavProgress from "@/components/NavProgress";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL, SITE_NAME, SITE_TAGLINE, SITE_DESC, jsonLd } from "@/lib/site";
 import "./globals.css";
 
@@ -66,6 +67,7 @@ export default function RootLayout({ children }) {
             publishers. Check the originals for detail. <Link href="/about">About</Link>
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
