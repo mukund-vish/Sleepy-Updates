@@ -6,14 +6,26 @@ import { getPost } from "@/lib/db";
 import { parts, longDate } from "@/lib/post";
 import { SITE_URL, SITE_NAME, jsonLd } from "@/lib/site";
 
+const esc = (s) =>
+  String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const isWeb = (u) => /^https?:\/\//i.test(u || "");
+
 marked.use({
   renderer: {
     html: () => "", 
-    image: ({ href, text }) =>
-      `<img src="${href.replace(/"/g, "%22")}" alt="${text}" loading="lazy" referrerpolicy="no-referrer">`,
+    image({ href, text }) {
+      return isWeb(href)
+        ? `<img src="${esc(href)}" alt="${text}" loading="lazy" referrerpolicy="no-referrer">`
+        : text;
+    },
+    link({ href, tokens }) {
+      const label = this.parser.parseInline(tokens);
+      return isWeb(href) ? `<a href="${esc(href)}" rel="noopener noreferrer">${label}</a>` : label;
+    },
   },
 });
-export const revalidate = 3600;
+export const revalidate = 3600; 
+
 
 const load = cache(getPost);
 const published = (d) => `${d}T15:30:00Z`;
