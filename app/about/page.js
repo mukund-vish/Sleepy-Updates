@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/site";
+import { FEEDS } from "@/lib/sources";
 
 export const metadata = {
   title: "About",
@@ -8,14 +9,8 @@ export const metadata = {
   alternates: { canonical: "/about" },
 };
 
-const SOURCES = [
-  ["The Verge", "https://www.theverge.com"],
-  ["TechCrunch", "https://techcrunch.com"],
-  ["Ars Technica", "https://arstechnica.com"],
-  ["Hacker News", "https://news.ycombinator.com"],
-  ["Gadgets 360", "https://www.gadgets360.com"],
-  ["Inc42", "https://inc42.com"],
-];
+const TECH = FEEDS.filter((f) => f.topic === "tech");
+const SECURITY = FEEDS.filter((f) => f.topic === "security");
 
 const A = (props) => (
   <a {...props} style={{ color: "var(--lamp)", textUnderlineOffset: "3px" }} />
@@ -33,27 +28,33 @@ export default function About() {
 
       <h2 className="section">What you get</h2>
       <p>
-        Every night around 9 PM IST, a new digest is published here. It covers the six to eight
-        stories that mattered most that day, each summarized in a short paragraph with a link to
+        Every night around 9 PM IST, a new digest is published here. It covers the seven to nine
+        stories that mattered most that day, from general tech to security, each summarized in a short paragraph with a link to
         the original article. No endless scrolling, no notifications, no noise.
       </p>
 
       <h2 className="section">How it is made</h2>
       <p>
-        Each evening the site collects the day's headlines from a handful of public news feeds. An
-        AI model picks the most important stories, merges duplicates and writes the summaries. The
-        links and images are added by the site itself, straight from the original sources, so the
-        model never invents a link.
+        Each evening the site collects the last day's headlines from public news feeds. An AI
+        "editor" reads every headline, picks the stories that matter most and groups reports of the
+        same story together. A second step then writes a short summary for each one. The links and
+        images are added by the site itself, straight from the original sources, so the model never
+        invents a link.
       </p>
 
       <h2 className="section">Where the news comes from</h2>
-      <ul>
-        {SOURCES.map(([name, url]) => (
-          <li key={name}>
-            <A href={url} target="_blank" rel="noopener noreferrer">{name}</A>
-          </li>
-        ))}
-      </ul>
+      {[["Technology", TECH], ["Security", SECURITY]].map(([label, list]) => (
+        <div key={label}>
+          <p style={{ margin: "1rem 0 0.25rem", font: "700 0.85rem var(--sans)", color: "var(--dim)" }}>{label}</p>
+          <ul style={{ marginTop: 0 }}>
+            {list.map((f) => (
+              <li key={f.name}>
+                <A href={f.site} target="_blank" rel="noopener noreferrer">{f.name}</A>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
 
       <h2 className="section">Please keep in mind</h2>
       <p>
