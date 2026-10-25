@@ -2,6 +2,7 @@ import Link from "next/link";
 import { listPosts } from "@/lib/db";
 import { prettyDate } from "@/lib/digest";
 import { parts, longDate } from "@/lib/post";
+import SubscribeForm from "@/components/SubscribeForm";
 
 export const metadata = { alternates: { canonical: "/" } };
 export const revalidate = 300; 
@@ -39,6 +40,8 @@ export default async function Home() {
           <Link href={href} className="more">Read the full digest</Link>
         </aside>
       </section>
+
+      <SubscribeForm />
 
       {older.length > 0 && (
         <section>

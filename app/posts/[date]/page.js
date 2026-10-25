@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { getPost } from "@/lib/db";
 import { parts, longDate } from "@/lib/post";
+import SubscribeForm from "@/components/SubscribeForm";
 import { SITE_URL, SITE_NAME, jsonLd } from "@/lib/site";
 
 const esc = (s) =>
@@ -104,6 +105,7 @@ export default async function Post({ params }) {
           </aside>
         )}
       </div>
+      <SubscribeForm compact />
     </article>
   );
 }
