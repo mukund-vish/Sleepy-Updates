@@ -7,7 +7,7 @@ import { digestEmail, oneClickUrl, unsubscribeUrl } from "@/lib/newsletter";
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
-const PER_RUN = 250;   // Brevo free plan allows 300 emails/day; leave room for confirmations
+const PER_RUN = 250; 
 const PARALLEL = 5;
 
 export async function GET(req) {
@@ -18,7 +18,8 @@ export async function GET(req) {
   const post = await getPost(date);
   if (!post) return Response.json({ skipped: "no digest yet" });
 
-  const queue = await dueSubscribers(date, PER_RUN);
+  const force = new URL(req.url).searchParams.get("force") === "1";
+  const queue = await dueSubscribers(force ? "force" : date, PER_RUN);
   let sent = 0, failed = 0;
 
   async function worker() {
